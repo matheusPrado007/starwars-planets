@@ -42,7 +42,8 @@ export default function Table() {
       > Number(inputs.number)));
       break;
     case 'menor que':
-      setSearch(arr.filter((el) => el[inputs.columnFilter] < inputs.number));
+      setSearch(arr.filter((el) => Number(el[inputs.columnFilter])
+      < Number(inputs.number)));
       break;
     case 'igual a':
       setSearch(arr.filter((el) => Number(el[inputs.columnFilter])
@@ -70,7 +71,7 @@ export default function Table() {
       </label>
       <select
         data-testid="column-filter"
-        name="columnfilter"
+        name="columnFilter"
         onChange={ handleChange }
       >
         <option value="population">population</option>
@@ -101,7 +102,7 @@ export default function Table() {
         <button
           data-testid="button-filter"
           type="button"
-          onClick={ () => filterResult(dataFilterName) }
+          onClick={ () => filterResult(search) }
         >
           Filtrar
         </button>
