@@ -9,15 +9,22 @@ export default function Table() {
     'Created', 'Edited', 'URL',
   ];
 
+  const optionsColumn = [
+    'population', 'orbital_period', 'diameter',
+    'rotation_period', 'surface_water',
+  ];
+
   const { data } = useContext(starWarsContext);
 
   const [search, setSearch] = useState('');
   const [inputs, setInputs] = useState({
     name: '',
-    columnFilter: 'population',
+    columnFilter: optionsColumn[0],
     quantity: 'maior que',
     number: 0,
   });
+
+  const [colunmFilter, setColunmFilter] = useState(optionsColumn);
 
   const dataFilterName = data.filter((el) => el.name
     .toUpperCase().includes(inputs.name.toUpperCase()));
@@ -56,6 +63,14 @@ export default function Table() {
     return [];
   };
 
+  const btnFilter = () => {
+    filterResult(search);
+    const newFilter = colunmFilter.filter((el) => (
+      el !== inputs.columnFilter
+    ));
+    setColunmFilter(newFilter);
+  };
+
   return (
     <>
       <label htmlFor="1-filter">
@@ -74,11 +89,11 @@ export default function Table() {
         name="columnFilter"
         onChange={ handleChange }
       >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        { colunmFilter.map((el, i) => (
+          <option key={ i } value={ el } id={ el }>
+            { el }
+          </option>
+        )) }
       </select>
       <select
         data-testid="comparison-filter"
@@ -102,11 +117,19 @@ export default function Table() {
         <button
           data-testid="button-filter"
           type="button"
-          onClick={ () => filterResult(search) }
+          onClick={ btnFilter }
         >
           Filtrar
         </button>
       </label>
+      <div>
+        <p>
+          {`${inputs.columnFilter} ${inputs.quantity} ${inputs.number}`}
+          <button type="button">
+            Excluir
+          </button>
+        </p>
+      </div>
       <table>
         <thead>
           <tr>
